@@ -16,14 +16,14 @@ RUN apt-get update && apt-get -y upgrade
 
 
 USER ${MY_USER}
-# use https for all github repos
-RUN git config --global url."https://github.com/".insteadOf git@github.com:
-RUN git config --global url."https://".insteadOf git://
-
 # clone project root
-RUN git clone git@github.com:tuw-robotics/project-tuw-release.git ${CONTAINER_PROJECT_DIR}
+RUN git config --global url."https://github.com/".insteadOf git@github.com:   && \
+    git config --global url."https://".insteadOf git://   && \
+    git clone git@github.com:tuw-robotics/project-tuw-release.git ${CONTAINER_PROJECT_DIR} 
+
 RUN cd ${CONTAINER_PROJECT_DIR}  && \
-    make clone 
+    make clone   && \
+    rm ~/.gitconfig
 
 USER root
 # install project dependencies
@@ -32,8 +32,6 @@ RUN cd ${CONTAINER_PROJECT_DIR}/ws01   && \
 
 USER ${MY_USER}
 # use ssl for all github repos
-RUN git config --global url."git@github.com:".insteadOf "https://github.com/"
-RUN git config --global url."git://".insteadOf "https://"
 RUN git config --global user.email "${MY_USER}@container"
 RUN git config --global user.name "${MY_USER}"
 # change color in bash green -> red
