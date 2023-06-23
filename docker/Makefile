@@ -23,7 +23,8 @@ help:
 	@echo "   Help Menu"
 	@echo ""
 	@echo "   make build                - builds images"
-	@echo "   make build-alab           - builds images"
+	@echo "   make build DOCKER_BUILD_ARG=\"--rm --no-cache -t\"" 
+	@echo "                             - builds images from scratch"
 	@echo "   make run                  - runs container"
 	@echo "   make login USER=username  - login container registry"
 	@echo ""
@@ -42,13 +43,15 @@ build-base:
 		--build-arg CONTAINER_PROJECT_NAME=${PROJECT_NAME} \
 		-f Dockerfile-base ./
 
-build: build-base
+build-run: 
 	@docker build ${DOCKER_BUILD_ARG} ${OWNER}/${PROJECT_NAME}-${USER} \
 		--build-arg OWNER=${OWNER} \
 		--build-arg BASE_CONTAINER=${PROJECT_NAME}-${USER}-base \
 		--build-arg CONTAINER_PROJECT_ENV_NAME=${CONTAINER_PROJECT_ENV_NAME} \
 		--build-arg CONTAINER_PROJECT_NAME=${PROJECT_NAME} \
 		-f Dockerfile ../
+
+build: build-base build-run
 
 run:
 	@docker run -ti -e "TERM=xterm-256color" --rm --privileged \
