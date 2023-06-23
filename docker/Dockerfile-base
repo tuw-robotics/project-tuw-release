@@ -1,0 +1,65 @@
+ARG OWNER=""
+ARG ROS_DISTRO=humble
+ARG UBUNTU_DISTRO=jammy
+ARG BASE_CONTAINER=ros:humble-ros-core
+ARG ROOT_CONTAINER=$OWNER$BASE_CONTAINER 
+FROM $ROOT_CONTAINER
+
+USER root
+
+# Replace 1000 with your user / group id
+ARG MY_USER=robot
+ARG MY_NAME="Robot"
+ARG MY_PASSWORD="password"
+ARG MY_UID=1000
+ARG MY_GID=1000
+ARG TZ=Europe/Vienna
+
+ENV MY_USER=${MY_USER}
+ENV MY_HOME=/home/${MY_USER}
+
+ENV CONFIG_DIR=./config
+ENV SCRIPTS_DIR=./scripts
+ENV INSTALL_DIR=/install
+
+ARG CONTAINER_PROJECTS_DIR=${MY_HOME}/projects
+ARG CONTAINER_PROJECT_NAME="my_project"
+ARG CONTAINER_PROJECT_ENV_NAME="MY_PROJECT_DIR"
+ENV CONTAINER_PROJECT_NAME=${CONTAINER_PROJECT_NAME}
+ENV CONTAINER_PROJECTS_DIR=${CONTAINER_PROJECTS_DIR}
+ENV CONTAINER_PROJECT_DIR=${CONTAINER_PROJECTS_DIR}/${CONTAINER_PROJECT_NAME}
+ENV CONTAINER_PROJECT_ENV_NAME=${CONTAINER_PROJECT_ENV_NAME}
+
+RUN apt-get update && apt-get -y upgrade
+# timezone
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+# copy scripts to container
+COPY ${SCRIPTS_DIR}/ ${INSTALL_DIR}/
+# allow to run scripts in the container
+RUN chmod -R a+x ${INSTALL_DIR}
+# copy keyboard config
+COPY ${CONFIG_DIR}/keyboard /etc/default/keyboard
+# setup user
+RUN $INSTALL_DIR/setup/add_user.sh
+# copy env
+COPY --chown=${MY_USER}:${MY_USER} ${CONFIG_DIR}/env.sh ${MY_HOME}/projects/env.sh
+# copy bash history
+COPY --chown=${MY_USER}:${MY_USER} ${CONFIG_DIR}/bash_history ${MY_HOME}/.bash_history
+# copy tmux config
+COPY --chown=${MY_USER}:${MY_USER} ${CONFIG_DIR}/tmux.conf ${MY_HOME}/.tmux.conf
+
+RUN apt-get install -y git make tmux build-essential
+RUN apt-get install -y python3-bloom python3-catkin-pkg python3-colcon-common-extensions
+
+USER ${MY_USER}
+# change color in bash green -> red
+RUN sed -i 's/'"1;32"'/'"1;31"'/g' ~/.bashrc
+RUN echo "export ROS_DISTRO=humble" >> ~/.bashrc
+RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> ~/.bashrc
+RUN echo "export PROJECTS_DIR=$CONTAINER_PROJECTS_DIR" >> ~/.bashrc
+RUN echo ${MY_PASSWORD} | sudo -S rosdep init
+RUN rosdep update
+ENV TERM xterm-256color
+WORKDIR ${CONTAINER_PROJECTS_DIR}
+ENV HOME=${MY_HOME}
+CMD /bin/bash
