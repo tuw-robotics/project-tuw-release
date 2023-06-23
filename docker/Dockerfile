@@ -24,6 +24,8 @@ RUN git config --global url."https://github.com/".insteadOf git@github.com:   &&
 RUN cd ${CONTAINER_PROJECT_DIR}  && \
     make clone   && \
     rm ~/.gitconfig
+RUN git config --global url."git@github.com".insteadOf "https://github.com/":   && \
+    git config --global url."git://".insteadOf "https://" 
 
 USER root
 # install project dependencies
@@ -37,7 +39,7 @@ RUN git config --global user.name "${MY_USER}"
 # change color in bash green -> red
 RUN echo "export $CONTAINER_PROJECT_ENV_NAME=$CONTAINER_PROJECT_DIR" >> ~/.bashrc
 RUN echo "if [ -f "env.sh" ]; then source env.sh; fi" >> ~/.bashrc
-RUN echo "eval \`ssh-agent -s\`; ssh-add ~/.ssh/id_rsa" >> ~/.bash_history
+RUN echo "eval \`ssh-agent -s\`; ssh-add ~/.ssh/id_ed25519" >> ~/.bash_history
 
     
 ENV TERM xterm-256color

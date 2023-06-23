@@ -11,7 +11,8 @@ HOST_PROJECT_DIR = $(shell cd ..; pwd)
 HOSTNAME := $(shell hostname)
 CURRENT_UID := $(shell id -u)
 CURRENT_GID := $(shell id -g)
-CONTAINER_PROJECTS_DIR = /home/${USER}/projects
+CONTAINER_USER_HOME = /home/${USER}
+CONTAINER_PROJECTS_DIR = ${CONTAINER_USER_HOME}/projects
 
 RUN = develop
 TAG = latest 
@@ -60,5 +61,6 @@ run:
 	    --hostname ${HOSTNAME}-${PREFIX} \
 	    --name ${HOSTNAME}-${PREFIX} \
 		-v /dev/shm:/dev/shm \
+		-v ~/.config/bloom:${CONTAINER_USER_HOME}/.config/bloom \
 		-v ${HOST_PROJECT_DIR}:${CONTAINER_PROJECTS_DIR}/${PROJECT_NAME} \
 		${OWNER}/${PROJECT_NAME}-${USER}
