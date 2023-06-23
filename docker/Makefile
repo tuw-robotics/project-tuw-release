@@ -57,5 +57,4 @@ run:
 	    --hostname ${HOSTNAME}-${PREFIX} \
 	    --name ${HOSTNAME}-${PREFIX} \
 		-v /dev/shm:/dev/shm \
-		-v /home/${USER}/.ssh:/home/${USER}/.ssh \
 		${OWNER}/${PROJECT_NAME}-${USER}

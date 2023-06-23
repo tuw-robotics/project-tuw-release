@@ -15,8 +15,7 @@ RUN apt-get update && apt-get -y upgrade
 # RUN apt-get install -y python3-bloom python3-catkin-pkg python3-colcon-common-extensions
 
 COPY --chown=${MY_USER}:${MY_USER} ./ ${CONTAINER_PROJECT_DIR}
-RUN cd ${CONTAINER_PROJECT_DIR}  && \
-    make clean
+RUN cd ${CONTAINER_PROJECT_DIR} 
 
 RUN cd ${CONTAINER_PROJECT_DIR}/ws01   && \
     rosdep install -i --from-path src --rosdistro ${ROS_DISTRO} -y
