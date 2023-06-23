@@ -11,10 +11,12 @@ echo 'source /opt/ros/${ROS_DISTRO}/setup.bash' >> ~/.bashrc
 echo "if [ -f "env.sh" ]; then source env.sh; fi" >> ~/.bashrc
 ```
 
-### subprojects
+### clone project and subprojects localy
 The file subprojects.mk holds a list with all subprojects. You just need to run `make clone`. 
 ```
-cd $MRRP2_DIR
+cd $PROJECTS_DIR
+git clone git@github.com:tuw-robotics/project-tuw-release.git $TUW_RELEASE_DIR
+cd $TUW_RELEASE_DIR
 make clone 
 ```
 
