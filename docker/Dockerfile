@@ -14,15 +14,28 @@ RUN apt-get update && apt-get -y upgrade
 # dependencies for stage and stage_ros2
 # RUN apt-get install -y python3-bloom python3-catkin-pkg python3-colcon-common-extensions
 
-COPY --chown=${MY_USER}:${MY_USER} ./ ${CONTAINER_PROJECT_DIR}
-RUN git config --global url.ssh://git@github.com/.insteadOf https://github.com/
-RUN cd ${CONTAINER_PROJECT_DIR}  && \
-    make clean
 
+USER ${MY_USER}
+# use https for all github repos
+RUN git config --global url."https://github.com/".insteadOf git@github.com:
+RUN git config --global url."https://".insteadOf git://
+
+# clone project root
+RUN git clone git@github.com:tuw-robotics/project-tuw-release.git ${CONTAINER_PROJECT_DIR}
+RUN cd ${CONTAINER_PROJECT_DIR}  && \
+    make clone 
+
+USER root
+# install project dependencies
 RUN cd ${CONTAINER_PROJECT_DIR}/ws01   && \
     rosdep install -i --from-path src --rosdistro ${ROS_DISTRO} -y
 
 USER ${MY_USER}
+# use ssl for all github repos
+RUN git config --global url."git@github.com:".insteadOf "https://github.com/"
+RUN git config --global url."git://".insteadOf "https://"
+RUN git config --global user.email "${MY_USER}@container"
+RUN git config --global user.name "${MY_USER}"
 # change color in bash green -> red
 RUN echo "export $CONTAINER_PROJECT_ENV_NAME=$CONTAINER_PROJECT_DIR" >> ~/.bashrc
 RUN echo "if [ -f "env.sh" ]; then source env.sh; fi" >> ~/.bashrc

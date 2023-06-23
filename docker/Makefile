@@ -57,4 +57,5 @@ run:
 	    --hostname ${HOSTNAME}-${PREFIX} \
 	    --name ${HOSTNAME}-${PREFIX} \
 		-v /dev/shm:/dev/shm \
+		-v ${HOST_PROJECT_DIR}:${CONTAINER_PROJECTS_DIR}/${PROJECT_NAME} \
 		${OWNER}/${PROJECT_NAME}-${USER}

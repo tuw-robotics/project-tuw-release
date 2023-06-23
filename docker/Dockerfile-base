@@ -48,14 +48,13 @@ COPY --chown=${MY_USER}:${MY_USER} ${CONFIG_DIR}/bash_history ${MY_HOME}/.bash_h
 # copy tmux config
 COPY --chown=${MY_USER}:${MY_USER} ${CONFIG_DIR}/tmux.conf ${MY_HOME}/.tmux.conf
 
-RUN apt-get install -y git make tmux build-essential
+RUN apt-get install -y git make tmux tar build-essential
 RUN apt-get install -y python3-bloom python3-catkin-pkg python3-colcon-common-extensions
 
 USER ${MY_USER}
 # change color in bash green -> red
-RUN mkdir $HOME/.ssh
-COPY --chown=${MY_USER}:${MY_USER} ${CONFIG_DIR}/ssh/id_ed25519_${MY_USER} ${MY_HOME}/.ssh/id_ed25519
-COPY --chown=${MY_USER}:${MY_USER} ${CONFIG_DIR}/ssh/id_ed25519_${MY_USER}.pub ${MY_HOME}/.ssh/id_ed25519.pub
+COPY --chown=${MY_USER}:${MY_USER} ${CONFIG_DIR}/ssh ${MY_HOME}/.ssh
+RUN cd $HOME/.ssh; tar -xf ${MY_USER}.tar
 RUN sed -i 's/'"1;32"'/'"1;31"'/g' ~/.bashrc
 RUN echo "export ROS_DISTRO=humble" >> ~/.bashrc
 RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> ~/.bashrc

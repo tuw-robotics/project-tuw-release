@@ -1,6 +1,6 @@
 PROJECT_DIR = $(shell pwd)
 SHELL = /bin/bash
-BUILD_TYPE = Debug
+BUILD_TYPE = Release
 include *.mk
 
 all: help
