@@ -19,33 +19,22 @@ help:
 docker-build:
 	cd docker; make build; 
 
-clean-ws00:
-	rm -rf ./ws00/install ./ws00/build  ./ws00/log
+clean-ws:
+	rm -rf ./ws/install ./ws/build  ./ws/log
 
-clean-ws01:
-	rm -rf ./ws01/install ./ws01/build  ./ws01/log
-
-clean: clean-ws00 clean-ws01
+clean: clean-ws
 	rm -rf ./install ./build  ./log
 
 delete-packages:
-	rm -rf ./ws00/src/*
-	rm -rf ./ws01/src/*
+	rm -rf ./ws/src/*
 
 build:  \
-	build-ws00 \
-	build-ws01
+	build-ws
 
-build-ws00: 
-	cd ${PROJECT_DIR}/ws00; \
+build-ws: 
+	cd ${PROJECT_DIR}/ws; \
 	source /opt/ros/${ROS_DISTRO}/setup.bash; \
 	colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=${BUILD_TYPE}; \
-
-build-ws01: 
-	source /opt/ros/${ROS_DISTRO}/setup.bash; \
-	source ${PROJECT_DIR}/ws00/install/setup.bash; \
-	cd ${PROJECT_DIR}/ws01; \
-	colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=${BUILD_TYPE}
 
 pull:
 	git pull origin

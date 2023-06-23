@@ -27,7 +27,7 @@ RUN cd ${CONTAINER_PROJECT_DIR}  && \
 
 USER root
 # install project dependencies
-RUN cd ${CONTAINER_PROJECT_DIR}/ws01   && \
+RUN cd ${CONTAINER_PROJECT_DIR}/ws   && \
     rosdep install -i --from-path src --rosdistro ${ROS_DISTRO} -y
 
 USER ${MY_USER}
