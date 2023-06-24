@@ -3,7 +3,7 @@
 export ROS_DISTRO=humble
 export PROJECT_DIR=${TUW_RELEASE_DIR}
 source /opt/ros/$ROS_DISTRO/setup.bash
-export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+#export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
 #export FASTRTPS_DEFAULT_PROFILES_FILE=$(pwd)/fastrtps.xml 
 #export RMW_FASTRTPS_USE_QOS_FROM_XML=0
 
@@ -20,5 +20,4 @@ source_ws () {
 }
 
 echo "** ROS2 $ROS_DISTRO initialized with $RMW_IMPLEMENTATION **"
-source_ws ${PROJECT_DIR}/ws00/install/setup.bash
-source_ws ${PROJECT_DIR}/ws01/install/setup.bash
+source_ws ${PROJECT_DIR}/ws/install/setup.bash
