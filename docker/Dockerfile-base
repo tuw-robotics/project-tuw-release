@@ -48,7 +48,7 @@ COPY --chown=${MY_USER}:${MY_USER} ${CONFIG_DIR}/bash_history ${MY_HOME}/.bash_h
 # copy tmux config
 COPY --chown=${MY_USER}:${MY_USER} ${CONFIG_DIR}/tmux.conf ${MY_HOME}/.tmux.conf
 
-RUN apt-get install -y git make tmux tar build-essential
+RUN apt-get install -y git make tmux tar build-essential iputils-ping
 RUN apt-get install -y python3-bloom python3-catkin-pkg python3-colcon-common-extensions
 
 USER ${MY_USER}
