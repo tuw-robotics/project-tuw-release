@@ -89,6 +89,23 @@ Release Repository url: `https://github.com/tuw-robotics/marker_msgs-release.git
 Upstream Repository URI: `https://github.com/tuw-robotics/marker_msgs.git`
 Upstream Devel Branch: ros2, humble
 
+### marker_msgs
+
+Bloom Release: 
+```
+# humble --> branch ros2
+# bloom-release --new-track --rosdistro humble --track humble marker_msgs # first-time
+bloom-release --rosdistro humble marker_msgs
+# rolling --> branch ros2
+# bloom-release --new-track --rosdistro rolling --track rolling marker_msgs # first-time
+bloom-release --rosdistro rolling marker_msgs
+```
+
+Repository Name: `marker_msgs`
+Release Repository url: `https://github.com/tuw-robotics/marker_msgs-release.git`
+Upstream Repository URI: `https://github.com/tuw-robotics/marker_msgs.git`
+Upstream Devel Branch: ros2, humble
+
 ## Testing
 
 # uncrustify.xunit.xml
