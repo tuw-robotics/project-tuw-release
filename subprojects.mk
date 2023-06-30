@@ -13,6 +13,7 @@ ws/src/tuw_geometry:
 clone-ws: \
 	ws/src/tuw_msgs \
 	ws/src/tuw_geometry \
-	ws/src/marker_msgs
+	ws/src/marker_msgs \
+	ws/src/tuw_gazebo
 
 clone: rosdistro clone-ws

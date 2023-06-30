@@ -29,8 +29,7 @@ RUN git config --global url."git@github.com".insteadOf "https://github.com/":   
 
 USER root
 # install project dependencies
-RUN cd ${CONTAINER_PROJECT_DIR}/ws   && \
-    rosdep install -i --from-path src --rosdistro ${ROS_DISTRO} -y
+RUN rosdep install -i --from-path ${CONTAINER_PROJECT_DIR}/ws/src --rosdistro ${ROS_DISTRO} -y
 
 USER ${MY_USER}
 # use ssl for all github repos
